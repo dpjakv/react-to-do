@@ -1,4 +1,4 @@
 # react-to-do
  CRUD with React. Simple To Do App
 
-Hosted [here](https://dpjha-react-todo.netlify.app/)
+See in action [here](https://dpjha-react-todo.netlify.app/)
