@@ -14,7 +14,7 @@ function App() {
         return;
       }
       let localTodos = localStorage.getItem('todos');
-      if(!localTodos){
+      if(!localTodos) {
         return;
       }
       localTodos = JSON.parse(localTodos).todos;
@@ -25,28 +25,52 @@ function App() {
       localStorage.setItem('todos', JSON.stringify({todos: newList}));
     }
 
-    function handleAddToDo(newTaskValue){
+    function handleTaskMovement(index, direction) {
+      let taskList = [...todos];
+      let temp = taskList[index];
+
+      if(direction == true && index > 0) { // Move Up
+        taskList[index] = taskList[index-1];
+        taskList[index-1] = temp;
+      } 
+      else if(direction == false && index < taskList.length-1) { // Move Down
+        taskList[index] = taskList[index+1];
+        taskList[index+1] = temp;
+      } 
+      else {
+        return;
+      }
+      persistList(taskList);
+      setTodo(taskList);
+    }
+
+    function handleAddTask(newValue) {
+      let newTaskValue = newValue.trim();
+      console.log("TaskValue: ",newTaskValue,".");
+      if(newTaskValue == "") {
+        return;
+      }
       const newList = [...todos, newTaskValue];
       persistList(newList);
       setTodo(newList);
     }
 
-    function handleDeleteTodo(index) {
+    function handleDeleteTask(index) {
       const newList = todos.filter((todo, todoIndex) => todoIndex != index);
       persistList(newList);
       setTodo(newList);
     }
 
-    function handleEditTodo(index) {
+    function handleEditTask(index) {
       const taskToEdit = todos[index];
-      handleDeleteTodo(index);
+      handleDeleteTask(index);
       setnewTaskValue(taskToEdit);
     }
 
     return (
       <>
-        <ToDoInput newTaskValue={newTaskValue} setnewTaskValue={setnewTaskValue} addTask={handleAddToDo}/>
-        <ToDoList deleteTask = {handleDeleteTodo} editTask = {handleEditTodo} todos={todos}/>
+        <ToDoInput newTaskValue={newTaskValue} setnewTaskValue={setnewTaskValue} addTask={handleAddTask}/>
+        <ToDoList deleteTask={handleDeleteTask} editTask={handleEditTask} moveTask={handleTaskMovement} todos={todos}/>
       </>
     )
 }
